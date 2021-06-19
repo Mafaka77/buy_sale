@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import '../widgets/CategoryList.dart';
 
 Future<List<Data>> fetchData() async {
-  var url=Uri.parse('http://127.0.0.1:8000/api/ads/all');
+  var url = Uri.parse('http://192.168.154.44:8000/api/ads/all');
   final response = await http.get(url);
   if (response.statusCode == 200) {
     List jsonResponse = json.decode(response.body);
@@ -24,11 +24,8 @@ class Data {
   final String categories;
   final String ads_details;
   final String ads_price;
-  final String image_url1;
-  final String image_url2;
+  final List<dynamic> image_name;
   final String user_id;
-  final String user_name;
-  final String user_address;
 
   Data(
       {required this.id,
@@ -36,11 +33,8 @@ class Data {
       required this.categories,
       required this.ads_details,
       required this.ads_price,
-      required this.image_url1,
-      required this.image_url2,
-      required this.user_id,
-      required this.user_name,
-      required this.user_address});
+      required this.image_name,
+      required this.user_id});
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
@@ -49,11 +43,9 @@ class Data {
       categories: json['categories'],
       ads_details: json['ads_details'],
       ads_price: json['ads_price'],
-      image_url1: json['image_url1'],
-      image_url2: json['image_url2'],
+      image_name: json['image_name'],
       user_id: json['user_id'],
-      user_name: json['user_name'],
-      user_address: json['user_address'],
+
     );
   }
 }
@@ -82,7 +74,7 @@ class _HomeWidgetState extends State<HomeWidget> {
           child: Text('My Location:'),
         ),
         SizedBox(
-          height: 200,
+          height: 100,
           width: 1000,
           child: Carousel(
             images: [
@@ -129,7 +121,7 @@ class _HomeWidgetState extends State<HomeWidget> {
               if (snapshot.hasData) {
                 List<Data> data = snapshot.data!;
                 return GridView.builder(
-                  shrinkWrap: true,
+                    shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -141,7 +133,13 @@ class _HomeWidgetState extends State<HomeWidget> {
                       return Container(
                           color: Colors.white,
                           child: FoodsWidget(
-                              data[index].ads_title, data[index].image_url1));
+                            data[index].id,
+                              data[index].ads_title,
+                              data[index].categories,
+                              data[index].ads_details,
+                              data[index].ads_price,
+                            data[index].image_name[0],
+                            data[index].user_id));
                     });
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");

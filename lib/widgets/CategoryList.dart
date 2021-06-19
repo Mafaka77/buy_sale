@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<List<Data>> fetchData() async {
-  var url=Uri.parse('http://127.0.0.1:8000/api/categories/all');
+  var url=Uri.parse('http://192.168.154.44:8000/api/categories/all');
   final response = await http.get(url);
   if (response.statusCode == 200) {
     List jsonResponse = json.decode(response.body);
@@ -68,13 +68,13 @@ class _CategoryListWidgetState extends State<CategoryListWidget> {
                 itemCount:8,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
-                    height: 100,
+                    height: 200,
                     child: GridTile(
 
                           child: Image.network(data[index].icon,fit: BoxFit.contain,),
                           footer: GridTileBar(
                             backgroundColor: Colors.black45,
-                            title: Text(data[index].name),
+                            title: Center(child: Text(data[index].name)),
                           ),
 
                     ),
