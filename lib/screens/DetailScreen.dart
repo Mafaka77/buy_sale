@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+class Data {
+  final String ads_title;
+  final String ads_details;
+  final String categories;
+  final String ads_price;
+  final String user_id;
+  final String user_name;
+  final String user_address;
 
-// class Data {
-//   final String ads_title;
-//   final String ads_details;
-//   final String categories;
-//   final String ads_price;
-//   final String user_id;
-//   final String user_name;
-//   final String user_address;
+  Data(this.ads_title, this.ads_details, this.ads_price, this.categories,
+      this.user_id, this.user_name, this.user_address);
+}
 //
-//   Data(this.ads_title, this.ads_details, this.ads_price, this.categories,
-//       this.user_id, this.user_name, this.user_address);
-// }
-//
-// class Images {
-//   final String image_name;
-//
-//   Images(this.image_name);
-// }
+class Users {
+  final int id;
+  final String name;
+  final String email;
+  final String mobile;
+  final String address;
+
+  Users(this.id,this.name,this.email,this.mobile,this.address);
+}
 
 class DetailScreen extends StatefulWidget {
   final int id;
@@ -32,10 +38,8 @@ class DetailScreen extends StatefulWidget {
   DetailScreen(this.id, this.ads_title, this.categories, this.ads_details,
        this.ads_price, this.user_id);
 
-  @override
   _DetailScreenState createState() => _DetailScreenState();
 }
-
 class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
