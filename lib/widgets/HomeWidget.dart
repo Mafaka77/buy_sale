@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:buy_sale/widgets/CategoryList.dart';
 import 'package:buy_sale/widgets/FoodsWidget.dart';
-import 'package:carousel_pro/carousel_pro.dart';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../widgets/CategoryList.dart';
+import '../widgets/BannerWidget.dart';
 
 Future<List<Data>> fetchData() async {
   var url = Uri.parse('http://192.168.154.44:8000/api/ads/all');
@@ -76,12 +77,7 @@ class _HomeWidgetState extends State<HomeWidget> {
         SizedBox(
           height: 100,
           width: 1000,
-          child: Carousel(
-            images: [
-              Image.network(
-                  'https://image.flaticon.com/icons/png/512/3487/3487037.png')
-            ],
-          ),
+          child:BannerWidget()
         ),
         Container(
           margin: EdgeInsets.only(top: 10),
