@@ -9,7 +9,7 @@ import '../widgets/CategoryList.dart';
 import '../widgets/BannerWidget.dart';
 
 Future<List<Data>> fetchData() async {
-  var url = Uri.parse('http://192.168.154.44:8000/api/ads/all');
+  var url = Uri.parse('http://192.168.154.109:8000/api/ads/all');
   final response = await http.get(url);
   if (response.statusCode == 200) {
     List jsonResponse = json.decode(response.body);
