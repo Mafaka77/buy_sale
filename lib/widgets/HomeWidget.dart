@@ -46,7 +46,6 @@ class Data {
       ads_price: json['ads_price'],
       image_name: json['image_name'],
       user_id: json['user_id'],
-
     );
   }
 }
@@ -74,11 +73,8 @@ class _HomeWidgetState extends State<HomeWidget> {
           height: 30,
           child: Text('My Location:'),
         ),
-        SizedBox(
-          height: 100,
-          width: 1000,
-          child:BannerWidget()
-        ),
+        Center(
+            child: SizedBox(height: 200, width: 1000, child: BannerWidget())),
         Container(
           margin: EdgeInsets.only(top: 10),
           child: Text(
@@ -129,13 +125,13 @@ class _HomeWidgetState extends State<HomeWidget> {
                       return Container(
                           color: Colors.white,
                           child: FoodsWidget(
-                            data[index].id,
+                              data[index].id,
                               data[index].ads_title,
                               data[index].categories,
                               data[index].ads_details,
                               data[index].ads_price,
-                            data[index].image_name[0],
-                            data[index].user_id));
+                              data[index].image_name[0],
+                              data[index].user_id));
                     });
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");

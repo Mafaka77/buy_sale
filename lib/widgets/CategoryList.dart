@@ -1,3 +1,4 @@
+import 'package:buy_sale/screens/CategoryWiseScreen.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -68,15 +69,21 @@ class _CategoryListWidgetState extends State<CategoryListWidget> {
                 itemCount: data.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
-                    height: 200,
-                    child: GridTile(
-                      child: Image.network(
-                        data[index].icon,
-                        fit: BoxFit.contain,
-                      ),
-                      footer: GridTileBar(
-                        backgroundColor: Colors.black45,
-                        title: Center(child: Text(data[index].name)),
+                    child: GestureDetector(
+                      onTap: ()=>{
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (c)=>CategoryWise(data[index].name)
+                        ))
+                      },
+                      child: GridTile(
+                        child: Image.network(
+                          data[index].icon,
+                          fit: BoxFit.contain,
+                        ),
+                        footer: GridTileBar(
+                          backgroundColor: Colors.black45,
+                          title: Center(child: Text(data[index].name)),
+                        ),
                       ),
                     ),
                   );
