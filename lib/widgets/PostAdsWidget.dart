@@ -10,7 +10,7 @@ class _PostAdsWidgetState extends State<PostAdsWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text('Post Ads'),
+
     );
   }
 }

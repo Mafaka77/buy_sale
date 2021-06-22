@@ -176,6 +176,23 @@ class _DetailScreenState extends State<DetailScreen> {
                     return Center(child: CircularProgressIndicator());
                   },
                 ),
+              ),Container(
+                child: Row(
+                  children: [
+                    Container(
+                      child: TextButton(
+                        onPressed: ()=>{},
+                        child: Text('Chat with Seller'),
+                      ),
+                    ),
+                    Container(
+                      child: TextButton(
+                        onPressed: ()=>{},
+                        child: Text('Call Seller'),
+                      ),
+                    )
+                  ],
+                ),
               )
             ],
           ),

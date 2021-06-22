@@ -1,4 +1,5 @@
 // @dart=2.9
+import 'package:buy_sale/screens/DetailScreen.dart';
 import 'package:flutter/material.dart';
 import 'screens/Navigation.dart';
 import 'screens/LoginScreen.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Navigation()
+      home: Navigation(),
     );
   }
 }

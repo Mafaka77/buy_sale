@@ -9,6 +9,15 @@ class MyAccountWidget extends StatefulWidget {
 class _MyAccountWidgetState extends State<MyAccountWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      margin: EdgeInsets.all(15.0),
+      child: Column(
+        children: [
+          Container(
+
+          )
+        ],
+      ),
+    );
   }
 }
