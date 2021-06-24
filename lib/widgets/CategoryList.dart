@@ -3,46 +3,37 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
-Future<List<Data>> fetchData() async {
-  var url = Uri.parse('http://192.168.154.109:8000/api/categories/all');
-  final response = await http.get(url);
-  if (response.statusCode == 200) {
-    List jsonResponse = json.decode(response.body);
-    return jsonResponse.map((data) => new Data.fromJson(data)).toList();
-  } else {
-    throw Exception('Unexpected error occured!');
-  }
-}
-
 class Data {
   final int id;
   final String name;
   final String icon;
 
-  Data({
-    required this.id,
-    required this.name,
-    required this.icon,
-  });
+  Data({required this.id, required this.name, required this.icon});
 
   factory Data.fromJson(Map<String, dynamic> json) {
-    return Data(
-      id: json['id'],
-      name: json['name'],
-      icon: json['icon'],
-    );
+    return Data(id: json['id'], name: json['name'], icon: json['icon']);
   }
 }
 
+
 class CategoryListWidget extends StatefulWidget {
   CategoryListWidget({Key? key}) : super(key: key);
-
   @override
   _CategoryListWidgetState createState() => _CategoryListWidgetState();
 }
 
 class _CategoryListWidgetState extends State<CategoryListWidget> {
+  Future<List<Data>> fetchData() async {
+    var url = Uri.parse('http://192.168.154.44:8000/api/categories/all');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => new Data.fromJson(data)).toList();
+    } else {
+      throw Exception('Unexpected error occured!');
+    }
+  }
+
   late Future<List<Data>> futureData;
 
   void initState() {

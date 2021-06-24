@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:carousel_pro/carousel_pro.dart';
@@ -157,16 +158,26 @@ class _DetailScreenState extends State<DetailScreen> {
                           Container(
                             child: Row(
                               children: [
-                                Icon(FontAwesome.mobile),
+                                Icon(FontAwesome.mobile,color: Colors.greenAccent,),
                                 Text(snapshot.data!.mobile)
                               ],
                             ),
                           ),
                           Container(
-                            child: Text('Address'),
+                            child: Row(
+                              children: [
+                                Icon(FontAwesome.map_marker,color: Colors.redAccent,),
+                                Text(snapshot.data!.address)
+                              ],
+                            )
                           ),
                           Container(
-                            child: Text('ID:${widget.user_id}'),
+                            child: Row(
+                              children: [
+                                Icon(FontAwesome.user_circle,color: Colors.deepOrange,),
+                                Text(snapshot.data!.name)
+                              ],
+                            ),
                           )
                         ],
                       );
@@ -177,15 +188,21 @@ class _DetailScreenState extends State<DetailScreen> {
                   },
                 ),
               ),Container(
+                margin: EdgeInsets.only(top: 30),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
+                      width: 150,
+                      color: Colors.greenAccent,
                       child: TextButton(
                         onPressed: ()=>{},
                         child: Text('Chat with Seller'),
                       ),
                     ),
                     Container(
+                      width: 150,
+                      color: Colors.redAccent,
                       child: TextButton(
                         onPressed: ()=>{},
                         child: Text('Call Seller'),
