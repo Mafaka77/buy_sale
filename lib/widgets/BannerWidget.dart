@@ -22,7 +22,7 @@ class _BannerWidgetState extends State<BannerWidget> {
   List<dynamic> images = [];
 
   Future<List> _myData() async {
-    var url = Uri.parse('http://192.168.154.44:8000/api/banner/all');
+    var url = Uri.parse('http://10.180.243.49:8000/api/banner/all');
     var response = await http.get(url);
     var jsonResponse = jsonDecode(response.body)[0]['image_name'];
 

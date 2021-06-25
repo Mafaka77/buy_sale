@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'dart:async';
-
 class PostAdsUpload extends StatefulWidget {
   final int id;
   final String name;
@@ -18,8 +18,20 @@ class PostAdsUpload extends StatefulWidget {
 
 class _PostAdsUploadState extends State<PostAdsUpload> {
   final _controller = TextEditingController();
-  List<Asset> _images = <Asset>[];
-
+  List<Asset> _images = [];
+  Widget buildGridView() {
+    return GridView.count(
+      crossAxisCount: 3,
+      children: List.generate(_images.length, (index) {
+        Asset asset = _images[index];
+        return AssetThumb(
+          asset: asset,
+          width: 500,
+          height: 500,
+        );
+      }),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,13 +82,16 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
                         child: CircleAvatar(
                           radius: 25,
                           backgroundColor: Colors.redAccent,
-                          // foregroundImage:_images==null?AssetImage('assetName'): FileImage(_images[0]),
                         ),
                       ),
                     )
                   ],
                 ),
-              )
+              ),
+              Container(
+                height: 200,
+
+                  child: buildGridView())
             ],
           ),
         ),
@@ -103,6 +118,7 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
     if(!mounted) return;
     setState(() {
       _images=resultList;
+      print(_images);
     });
 
   }
