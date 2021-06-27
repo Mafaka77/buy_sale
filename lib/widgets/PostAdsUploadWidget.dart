@@ -1,13 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'dart:async';
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 class PostAdsUpload extends StatefulWidget {
-  final int id;
+  final int  id;
   final String name;
 
   PostAdsUpload(this.id, this.name);
@@ -21,6 +22,9 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
   List<Asset> _images = [];
   Widget buildGridView() {
     return GridView.count(
+      padding: EdgeInsets.all(10),
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
       crossAxisCount: 3,
       children: List.generate(_images.length, (index) {
         Asset asset = _images[index];
@@ -45,8 +49,9 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: EdgeInsets.only(bottom: 10),
+
                 child: TextField(
+                  maxLength: 40,
                   decoration: InputDecoration(
                       hintText: 'Your ads Title',
                       border: OutlineInputBorder(
@@ -54,9 +59,9 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(bottom: 10),
                 child: TextField(
                   keyboardType: TextInputType.multiline,
+                  maxLength: 500,
                   maxLines: 10,
                   decoration: InputDecoration(
                       hintText: 'Ads Details',
@@ -88,6 +93,7 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
                   ],
                 ),
               ),
+              Container(child: TextButton(onPressed: ()=>{postAds()},child: Text('Submit'),),),
               Container(
                 height: 200,
 
@@ -108,6 +114,8 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
         enableCamera: true,
         selectedAssets: _images,
         materialOptions: MaterialOptions(
+          selectionLimitReachedText: 'Error',
+          textOnNothingSelected: 'Please Select an Image',
           allViewTitle: 'All Photos',
           useDetailsView: false,
         ),
@@ -122,58 +130,32 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
     });
 
   }
-
-// Future<void> _showDialog() async {
-//   return showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           content: SingleChildScrollView(
-//             child: ListBody(
-//               children: [
-//                 TextButton(
-//                     onPressed: () async {
-//                       await chooseImageFromCamera()
-//                           .then((value) => Navigator.of(context).pop());
-//                     },
-//                     child: Text('Take Picture')),
-//                 TextButton(
-//                     onPressed: () async {
-//                       await chooseImageFromGallery()
-//                           .then((value) => Navigator.of(context).pop());
-//                     },
-//                     child: Text('Choose from Gallery')),
-//               ],
-//             ),
-//           ),
-//         );
-//       });
-// }
-
-// Future chooseImageFromCamera() async {
-//   final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
-//   setState(() {
-//     if (pickedFile != null) {
-//       _images.removeAt(0);
-//       _images.insert(0,File(pickedFile.path));
-//     } else {
-//       ScaffoldMessenger.of(context)
-//           .showSnackBar(SnackBar(content: Text('No Image Picked')));
-//     }
-//   });
-// }
-//
-// Future chooseImageFromGallery() async {
-//   final pickedFile =
-//       await ImagePicker().getImage(source: ImageSource.gallery);
-//   setState(() {
-//     if (pickedFile != null) {
-//       _images.removeAt(0,File(pickedFile.path));
-//       print(_images);
-//     } else {
-//       ScaffoldMessenger.of(context)
-//           .showSnackBar(SnackBar(content: Text('No image picked')));
-//     }
-//   });
-// }
+void  postAds()async{
+  List<MultipartFile> multipartImageList=[];
+  if(_images!=null){
+    for(Asset asset in _images){
+      ByteData byteData=await asset.getByteData();
+      List<int> imageData=byteData.buffer.asUint8List();
+      MultipartFile multipartFile=new MultipartFile.fromBytes(
+        imageData,
+        filename:'asdasd',
+        contentType: MediaType('image','jpeg'),
+      );
+      multipartImageList.add(multipartFile);
+    }
+    print(multipartImageList);
+    FormData formData=FormData.fromMap({
+      'image_name[]':multipartImageList,
+      'ads_title':'ads_title',
+      'categories':'Cars',
+      'ads_details':'ads_details',
+      'ads_price':'3445',
+      'user_id':'1'
+    });
+    Dio dio=new Dio();
+    String url='http://192.168.154.111:8000/api/ads/store';
+    var res=await dio.post(url,data: formData,);
+    print(res);
+  }
+}
 }
