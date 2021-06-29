@@ -1,3 +1,4 @@
+import 'package:buy_sale/routes/Api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -106,6 +107,7 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
   }
 
   Future<void> loadAssets() async {
+    // print('sadasd');
     List<Asset> resultList = <Asset>[];
     String error = 'No Error Detected';
     try {
@@ -126,7 +128,7 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
     if(!mounted) return;
     setState(() {
       _images=resultList;
-      print(_images);
+      // print(_images);
     });
 
   }
@@ -134,6 +136,9 @@ void  postAds()async{
   List<MultipartFile> multipartImageList=[];
   if(_images!=null){
     for(Asset asset in _images){
+      // print('test');
+      // asset.metadata.then((value) => print('test '+value));
+
       ByteData byteData=await asset.getByteData();
       List<int> imageData=byteData.buffer.asUint8List();
       MultipartFile multipartFile=new MultipartFile.fromBytes(
@@ -153,8 +158,7 @@ void  postAds()async{
       'user_id':'1'
     });
     Dio dio=new Dio();
-    String url='http://192.168.154.111:8000/api/ads/store';
-    var res=await dio.post(url,data: formData,);
+    var res=await dio.post(Routes.POST_ADS,data: formData);
     print(res);
   }
 }
