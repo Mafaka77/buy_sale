@@ -57,7 +57,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Future<List> _myData() async {
     var myId = this.widget.id;
     // print(myId);
-    var url = Uri.parse('http://192.168.154.44:8000/api/ads/details/$myId');
+    var url = Uri.parse('http://192.168.154.111:8000/api/ads/details/$myId');
     var response = await http.get(url);
 
     var jsonData = jsonDecode(response.body)['data'][0]['image_name'];
@@ -70,7 +70,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Future<Users> _myUsers() async {
     var uid = this.widget.user_id;
-    var url = Uri.parse('http://192.168.154.44:8000/api/auth/user/$uid');
+    var url = Uri.parse('http://192.168.154.111:8000/api/auth/user/$uid');
     var response = await http.get(url);
     var jsonData = jsonDecode(response.body)[0];
     return Users.fromJson(jsonData);

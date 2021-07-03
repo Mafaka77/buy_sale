@@ -1,3 +1,4 @@
+import 'package:buy_sale/routes/Api.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -22,7 +23,7 @@ class _BannerWidgetState extends State<BannerWidget> {
   List<dynamic> images = [];
 
   Future<List> _myData() async {
-    var url = Uri.parse('http://10.180.243.49:8000/api/banner/all');
+    var url = Uri.parse(Routes.LOAD_BANNER);
     var response = await http.get(url);
     var jsonResponse = jsonDecode(response.body)[0]['image_name'];
 

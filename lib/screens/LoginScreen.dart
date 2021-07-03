@@ -1,4 +1,9 @@
+import 'package:buy_sale/routes/Api.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'dart:async';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -7,57 +12,104 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
       ),
-      body: Container(
-        child: Center(
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.only(top:40),
-                  child: Text('LOGIN',style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: Colors.pinkAccent),),
+      body: SingleChildScrollView(
+        child: Container(
+          child: Center(
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: 40),
+                  child: Text(
+                    'LOGIN',
+                    style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.pinkAccent),
+                  ),
                 ),
-              Container(
-                margin: EdgeInsets.only(top:30,left: 30,right: 30),
-                child: TextField(
-                  decoration: InputDecoration(border: OutlineInputBorder(),hintText: 'Enter Email'),
-
+                Container(
+                  margin: EdgeInsets.only(top: 30, left: 30, right: 30),
+                  child: TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(), labelText: 'Enter Email'),
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top:30,left: 30,right: 30),
-                child: TextField(
-                  decoration: InputDecoration(border: OutlineInputBorder(),hintText: 'Enter Password'),
-
+                Container(
+                  margin: EdgeInsets.only(top: 30, left: 30, right: 30),
+                  child: TextField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Enter Password'),
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top:30),
-                child: Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 500,
+                Container(
+                    margin: EdgeInsets.only(top: 30),
+                    child: SizedBox(
+                      width: 300,
+                      height: 50,
                       child: TextButton(
                         style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-                          overlayColor: MaterialStateProperty.all<Color>(Colors.pinkAccent),
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.white),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.pinkAccent),
                         ),
-                        child: Text('Sign In'),
-                        onPressed: ()=>{},
+                        child: Text(
+                          'Sign In',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        onPressed: () => {login()},
                       ),
+                    )),
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Text('OR'),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: SizedBox(
+                    width: 300,
+                    height: 50,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Register',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.white),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.pinkAccent)),
                     ),
-                  ],
+                  ),
                 )
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+  void login() async{
+   final String email=_emailController.text;
+   final String password=_passwordController.text;
+   var url=Uri.parse('http://192.168.154.111:8000/api/auth/login?email=$email&password=$password');
+   var response=await http.get(url);
+   var res=jsonDecode(response.body)['token'];
+   String token=res;
+   print(token);
+
   }
 }

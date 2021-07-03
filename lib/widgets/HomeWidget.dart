@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:buy_sale/routes/Api.dart';
 import 'package:buy_sale/widgets/CategoryList.dart';
 import 'package:buy_sale/widgets/FoodsWidget.dart';
 
@@ -9,7 +10,7 @@ import '../widgets/CategoryList.dart';
 import '../widgets/BannerWidget.dart';
 
 Future<List<Data>> fetchData() async {
-  var url = Uri.parse('http://192.168.154.111:8000/api/ads/all');
+  var url = Uri.parse(Routes.LOAD_ADS);
   final response = await http.get(url);
   if (response.statusCode == 200) {
     List jsonResponse = json.decode(response.body);

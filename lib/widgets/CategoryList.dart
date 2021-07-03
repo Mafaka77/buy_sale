@@ -24,7 +24,7 @@ class CategoryListWidget extends StatefulWidget {
 
 class _CategoryListWidgetState extends State<CategoryListWidget> {
   Future<List<Data>> fetchData() async {
-    var url = Uri.parse('http://192.168.154.44:8000/api/categories/all');
+    var url = Uri.parse('http://192.168.154.111:8000/api/categories/all');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
