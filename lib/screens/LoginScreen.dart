@@ -1,9 +1,13 @@
 import 'package:buy_sale/routes/Api.dart';
+import 'package:buy_sale/screens/Navigation.dart';
+import 'package:buy_sale/screens/RegisterScreen.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:async';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -82,7 +86,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 300,
                     height: 50,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (builder)=>RegisterScreen()));
+                      },
                       child: Text(
                         'Register',
                         style: TextStyle(fontSize: 18),
@@ -102,14 +108,26 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-  void login() async{
-   final String email=_emailController.text;
-   final String password=_passwordController.text;
-   var url=Uri.parse('http://192.168.154.111:8000/api/auth/login?email=$email&password=$password');
-   var response=await http.get(url);
-   var res=jsonDecode(response.body)['token'];
-   String token=res;
-   print(token);
 
+  void login() async {
+    final String email = _emailController.text;
+    final String password = _passwordController.text;
+    final storage = new FlutterSecureStorage();
+    var url = Uri.parse(
+        'http://192.168.154.111:8000/api/auth/login?email=$email&password=$password');
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      var res = jsonDecode(response.body);
+      // String token=res;
+      // print(token);
+      var a = await storage.write(key: 'token', value: res['token'].toString());
+      var b=await storage.read(key: 'token');
+      print(b);
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (builder) => Navigation(),
+        ),
+      );
+    }
   }
 }

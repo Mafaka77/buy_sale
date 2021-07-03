@@ -4,7 +4,14 @@ import 'package:buy_sale/screens/PostAdsScreen.dart';
 import 'package:flutter/material.dart';
 import 'screens/Navigation.dart';
 import 'screens/LoginScreen.dart';
-void main() {
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'screens/RegisterScreen.dart';
+String a;
+Future<void> main() async{
+
+  WidgetsFlutterBinding.ensureInitialized();
+  final storage=FlutterSecureStorage();
+  a=await storage.read(key: 'token');
   runApp(MyApp());
 }
 
@@ -26,7 +33,12 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: LoginScreen(),
+      initialRoute: a==null?'login':'/',
+      routes: {
+        '/':(context)=>Navigation(),
+        'login':(context)=>LoginScreen(),
+        '/register':(context)=>RegisterScreen(),
+      },
     );
   }
 }
