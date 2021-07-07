@@ -48,7 +48,7 @@ class _CategoryWiseState extends State<CategoryWise> {
   Future<List<Data>> _myData() async {
     var cat = this.widget.name;
     print(cat);
-    var url = Uri.parse('http://192.168.154.111:8000/api/ads/cat/$cat');
+    var url = Uri.parse('http://10.180.243.55:8000/api/ads/cat/$cat');
     var response = await http.get(url);
     List jsonData = jsonDecode(response.body);
     return jsonData.map((e) => new Data.fromJson(e)).toList();

@@ -1,12 +1,10 @@
-import 'package:buy_sale/routes/Api.dart';
+import 'dart:convert';
+
 import 'package:buy_sale/screens/Navigation.dart';
 import 'package:buy_sale/screens/RegisterScreen.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'dart:async';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -45,16 +43,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextField(
                     controller: _emailController,
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(), labelText: 'Enter Email'),
+                        border: OutlineInputBorder(),
+                        labelText: 'Enter Email',
+                        prefixIcon: Icon(
+                          Icons.email,
+                          color: Colors.redAccent,
+                        )),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 30, left: 30, right: 30),
                   child: TextField(
                     controller: _passwordController,
+                    obscureText: true,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Enter Password'),
+                        labelText: 'Enter Password',
+                        prefixIcon: Icon(
+                          Icons.password,
+                          color: Colors.redAccent,
+                        )),
                   ),
                 ),
                 Container(
@@ -87,7 +95,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 50,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (builder)=>RegisterScreen()));
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (builder) => RegisterScreen()));
                       },
                       child: Text(
                         'Register',
@@ -114,14 +123,14 @@ class _LoginScreenState extends State<LoginScreen> {
     final String password = _passwordController.text;
     final storage = new FlutterSecureStorage();
     var url = Uri.parse(
-        'http://192.168.154.111:8000/api/auth/login?email=$email&password=$password');
+        'http://10.180.243.55:8000/api/auth/login?email=$email&password=$password');
     var response = await http.get(url);
     if (response.statusCode == 200) {
       var res = jsonDecode(response.body);
       // String token=res;
       // print(token);
       var a = await storage.write(key: 'token', value: res['token'].toString());
-      var b=await storage.read(key: 'token');
+      var b = await storage.read(key: 'token');
       print(b);
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(

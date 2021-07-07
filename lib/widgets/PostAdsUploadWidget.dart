@@ -1,15 +1,15 @@
+import 'dart:async';
+
 import 'package:buy_sale/routes/Api.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/services.dart';
-import 'package:multi_image_picker2/multi_image_picker2.dart';
-import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:multi_image_picker2/multi_image_picker2.dart';
+
 class PostAdsUpload extends StatefulWidget {
-  final int  id;
+  final int id;
   final String name;
 
   PostAdsUpload(this.id, this.name);
@@ -21,6 +21,7 @@ class PostAdsUpload extends StatefulWidget {
 class _PostAdsUploadState extends State<PostAdsUpload> {
   final _controller = TextEditingController();
   List<Asset> _images = [];
+
   Widget buildGridView() {
     return GridView.count(
       padding: EdgeInsets.all(10),
@@ -37,6 +38,7 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
       }),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,10 +52,10 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-
                 child: TextField(
                   maxLength: 40,
                   decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.title,color: Colors.redAccent,),
                       hintText: 'Your ads Title',
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)))),
@@ -74,9 +76,39 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
                 child: TextField(
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.price_check,color: Colors.redAccent,),
                       hintText: 'Price',
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)))),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 300,
+                      child: TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Address',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      color: Colors.black45,
+                      child: IconButton(
+                        onPressed: (){},
+                        icon: Icon(Icons.not_listed_location_sharp),
+                        color: Colors.red,
+                      )
+                    )
+                  ],
                 ),
               ),
               Container(
@@ -90,19 +122,29 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
                           backgroundColor: Colors.redAccent,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
-              Container(child: TextButton(onPressed: ()=>{postAds()},child: Text('Submit'),),),
-              Container(
-                height: 200,
-
-                  child: buildGridView())
+              Container(height: 200, child: buildGridView())
             ],
           ),
         ),
       ),
+      persistentFooterButtons: [
+        Center(
+          child: Container(
+            width: 400,
+            child: TextButton(
+              onPressed: () {},
+              child: Text(
+                'SUBMIT',
+                style: TextStyle(fontSize: 18, color: Colors.blueAccent),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -125,41 +167,41 @@ class _PostAdsUploadState extends State<PostAdsUpload> {
     } on Exception catch (e) {
       error = e.toString();
     }
-    if(!mounted) return;
+    if (!mounted) return;
     setState(() {
-      _images=resultList;
+      _images = resultList;
       // print(_images);
     });
-
   }
-void  postAds()async{
-  List<MultipartFile> multipartImageList=[];
-  if(_images!=null){
-    for(Asset asset in _images){
-      // print('test');
-      // asset.metadata.then((value) => print('test '+value));
 
-      ByteData byteData=await asset.getByteData();
-      List<int> imageData=byteData.buffer.asUint8List();
-      MultipartFile multipartFile=new MultipartFile.fromBytes(
-        imageData,
-        filename:'asdasd',
-        contentType: MediaType('image','jpeg'),
-      );
-      multipartImageList.add(multipartFile);
+  void postAds() async {
+    List<MultipartFile> multipartImageList = [];
+    if (_images != null) {
+      for (Asset asset in _images) {
+        // print('test');
+        // asset.metadata.then((value) => print('test '+value));
+
+        ByteData byteData = await asset.getByteData();
+        List<int> imageData = byteData.buffer.asUint8List();
+        MultipartFile multipartFile = new MultipartFile.fromBytes(
+          imageData,
+          filename: 'asdasd',
+          contentType: MediaType('image', 'jpeg'),
+        );
+        multipartImageList.add(multipartFile);
+      }
+      print(multipartImageList);
+      FormData formData = FormData.fromMap({
+        'image_name[]': multipartImageList,
+        'ads_title': 'ads_title',
+        'categories': 'Cars',
+        'ads_details': 'ads_details',
+        'ads_price': '3445',
+        'user_id': '1'
+      });
+      Dio dio = new Dio();
+      var res = await dio.post(Routes.POST_ADS, data: formData);
+      print(res);
     }
-    print(multipartImageList);
-    FormData formData=FormData.fromMap({
-      'image_name[]':multipartImageList,
-      'ads_title':'ads_title',
-      'categories':'Cars',
-      'ads_details':'ads_details',
-      'ads_price':'3445',
-      'user_id':'1'
-    });
-    Dio dio=new Dio();
-    var res=await dio.post(Routes.POST_ADS,data: formData);
-    print(res);
   }
-}
 }
